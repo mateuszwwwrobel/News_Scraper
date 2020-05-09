@@ -1,0 +1,95 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+
+  <!--Main layout-->
+  <main class="mt-5 pt-5">
+    <div class="container">
+
+
+      <hr class="my-5">
+
+      <!--Section: Magazine v.1-->
+      <section class="wow fadeIn">
+
+        <!--Section heading-->
+        <h2 class="h1 text-center my-5 font-weight-bold">Wykop Tasty News</h2>
+
+        <!--Grid row-->
+        <div class="row text-left">
+
+          <!--Grid column-->
+          <div class="h-100 col-lg-6 col-md-12">
+
+          {% for element in wykop_final_elements %}
+        
+            <!--Small news-->
+            <div style="height:75.5px;" class="row">
+              <div class="col-md-3">
+
+                <!--Image-->
+                <div class=" rounded z-depth-1">
+                  <img src="{{ element.1 }}" class="img-fluid" alt="Minor sample post image">  
+                  
+                   
+                  
+                </div>
+              </div>
+
+              <!--Excerpt-->
+              <div class="col-md-9">
+                 {{ element.0 }}
+              </div>
+
+            </div>
+            <!--/Small news-->
+
+            <hr>
+          {% endfor %}
+
+          </div>
+          <!--Grid column-->
+
+
+          <!--Grid column-->
+          <div class="h-100 col-lg-2 col-md-12">
+
+          {% for element in wykop_final_elements2 %}
+          
+            <!--Small news-->
+            <div style="height:75.5px;" class="row">
+              <div class="d-flex align-items-center col-md-4">
+
+                <!--Image-->
+                <div class="view overlay rounded z-depth-1 bg-warning px-5 py-2">
+                  {{count}}
+                  <a class="" target="_blank" href="{{ element }}">
+                  <i class="fas fa-external-link-alt"></i>
+                  <div class="mask rgba-white-slight"></div>
+                  </a>
+                </div>
+              </div>
+            </div>
+            <!--/Small news-->
+
+            <hr>
+          {% endfor %}
+
+        
+          </div>
+          <!--Grid column-->
+
+        </div>
+        <!--Grid row-->
+
+      </section>
+      <!--/Section: Magazine v.1-->
+
+
+    </div>
+  </main>
+  <!--Main layout-->
+
+
+{% endblock content %}
