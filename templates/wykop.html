@@ -20,68 +20,42 @@
         <div class="row text-left">
 
           <!--Grid column-->
-          <div class="h-100 col-lg-6 col-md-12">
+          <div class="col-lg-6 col-md-12 h-100">
 
-          {% for element in wykop_final_elements %}
-        
+            {% for element in wykop_final_elements %}
             <!--Small news-->
-            <div style="height:75.5px;" class="row">
+            <div class="row">
               <div class="col-md-3">
 
                 <!--Image-->
-                <div class=" rounded z-depth-1">
-                  <img src="{{ element.1 }}" class="img-fluid" alt="Minor sample post image">  
-                  
-                   
-                  
+                <div class="view overlay rounded z-depth-1">
+                  <img src="https://vignette.wikia.nocookie.net/wykopedia/images/7/71/Wykop_logo.jpg/revision/latest?cb=20090726130840&path-prefix=pl" class="img-fluid" alt="Minor sample post image">
+                  <a>
+                    <div class="mask rgba-white-slight"></div>
+                  </a>
                 </div>
               </div>
 
               <!--Excerpt-->
-              <div class="col-md-9">
-                 {{ element.0 }}
+              <div class="col-md-9 mt-3">
+                <a target="_blank" href="{{ element.0 }}">
+                  <p class="h6"><i class="pr-2 fas fa-link"></i>{{ element.1 }}</p>
+                </a>
+                
               </div>
 
             </div>
             <!--/Small news-->
 
             <hr>
-          {% endfor %}
-
+            {% endfor %}
           </div>
-          <!--Grid column-->
-
-
-          <!--Grid column-->
-          <div class="h-100 col-lg-2 col-md-12">
-
-          {% for element in wykop_final_elements2 %}
           
-            <!--Small news-->
-            <div style="height:75.5px;" class="row">
-              <div class="d-flex align-items-center col-md-4">
-
-                <!--Image-->
-                <div class="view overlay rounded z-depth-1 bg-warning px-5 py-2">
-                  {{count}}
-                  <a class="" target="_blank" href="{{ element }}">
-                  <i class="fas fa-external-link-alt"></i>
-                  <div class="mask rgba-white-slight"></div>
-                  </a>
-                </div>
-              </div>
-            </div>
-            <!--/Small news-->
-
-            <hr>
-          {% endfor %}
-
-        
-          </div>
-          <!--Grid column-->
 
         </div>
         <!--Grid row-->
+
+        
 
       </section>
       <!--/Section: Magazine v.1-->
@@ -93,3 +67,6 @@
 
 
 {% endblock content %}
+
+
+
