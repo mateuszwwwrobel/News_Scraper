@@ -22,20 +22,64 @@ class BenchmarkView(View):
             benchmark_response = requests.get(benchmark_url)
             benchmark_data = benchmark_response.text
             benchmark_soup = BeautifulSoup(benchmark_data, 'html.parser')
-            #print(soup)
+            benchmark_url_maker = "http://benchmark.pl{}"
 
-            benchmark_find_all_headlines = benchmark_soup.find_all('div',{'class': 'bbh-big-slider-mode-container' })
+            benchmark_final_elements_s1 = []
+            benchmark_final_elements_s2 = []
 
-            for post in benchmark_find_all_headlines:
-                article_title = post.find('div', {'class': 'bbh-primary'})
-                print(article_title)
+            benchmark_ready_soup = benchmark_soup.find_all('section')
+            
+
+            #SECTION 1 - MAIN TOPICS
+            section_1 = benchmark_ready_soup[1]
+            section_1_divs = section_1.find_all('div')
+            
+
+            for post in section_1_divs:
+                benchmark_href = post.find('a')['href']
+                benchmark_title = post.find('a')['href']
+                benchmark_link = (benchmark_url_maker.format(benchmark_href))
+                
+                benchmark_final_elements_s1.append((benchmark_link, benchmark_title))
+
+            
+            del benchmark_final_elements_s1[8:12]
+            del benchmark_final_elements_s1[1:7]
+            
+            print(benchmark_final_elements_s1)
+
+
+            #SECTION 2 - MAIN TOPICS:
+            section_2 = benchmark_ready_soup[2]
+            section_2_divs = section_2.find_all('div')
+            
+
+            for post in section_2_divs:
+                benchmark_href = post.find('a')['href']
+                benchmark_title = post.find('a')['href']
+                benchmark_link = (benchmark_url_maker.format(benchmark_href))
+                
+                benchmark_final_elements_s2.append((benchmark_link, benchmark_title))
+
+            
+            del benchmark_final_elements_s2[8:12]
+            del benchmark_final_elements_s2[1:7]
+            
+            print(benchmark_final_elements_s2)
+
+            #SECTION 3 - NEWS: 
+
+            #NEWSY LISTA POWINNA BYC PROSTA
+
+
+
 
 
             context = {
-                'article_title': article_title
-                #'article_date': article_date
-                #'article_url': article_url
+                'benchmark_final_elements_s1': benchmark_final_elements_s1,
+                'benchmark_final_elements_s2': benchmark_final_elements_s2,
             }
+
             return render(self.request, 'benchmark.html', context)
 
         except ObjectDoesNotExist:
