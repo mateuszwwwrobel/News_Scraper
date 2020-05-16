@@ -105,7 +105,7 @@ class BenchmarkView(View):
 
             
             del benchmark_final_elements_s3[12:]
-            print(benchmark_final_elements_s3)
+            
 
             context = {
                 'benchmark_final_elements_s1': benchmark_final_elements_s1,
@@ -133,7 +133,7 @@ class WykopView(View):
             
             #SOUP with url and title:
             first_part_of_soup = wykop_soup.find_all("a", {"rel": 'noopener'})
-            
+            print(first_part_of_soup)
             #<a> tag with href and title.
             shorter_first_part_of_soup = list(itertools.islice(first_part_of_soup,1,None,3))
             ready_first_part_of_soup = list(shorter_first_part_of_soup[3:])
@@ -181,7 +181,7 @@ class ArcheologyView(View):
                     archeo_title = element.find('a')['title']
                     archeo_link = element.find('a')['href']
                     archeo_image = element.find('img')['data-img-url']
-                    print(archeo_image)
+                    
                     
 
 
