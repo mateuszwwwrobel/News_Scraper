@@ -15,89 +15,10 @@
 
         <!--Section heading-->
         <h2 class="h1 text-center my-5 font-weight-bold">Benchmark Tasty News</h2>
-
+ 
         <!--Grid row-->
         <div class="row text-left">
-
-          <!--Grid column-->
-          <div class="h-100 col-lg-6 col-md-12">
-            <h4><strong>Gorące tematy:</strong></h4>
-          {% for element in benchmark_final_elements_s1 %}
-
-            <!--Small news-->
-            <div class="row">
-              <div class="col-md-3">
-
-                <!--Image-->
-                <div class="view overlay rounded z-depth-1">
-                  <img src="https://pbs.twimg.com/profile_images/692289216282112000/-WBe2yQi.jpg" class="img-fluid" alt="Minor sample post image">
-                  
-                    <div class="mask rgba-white-slight"></div>
-                
-                </div>
-              </div>
-
-              <!--Excerpt-->
-              <div class="col-md-9 pt-4">
-                
-                <a target="_blank" href="{{ element.0 }}" >
-
-                <p class="h6"><i class="pr-2 fas fa-link"></i> {{ element.1 }}</p>
-                  
-                </a>
-              </div>
-
-            </div>
-            <!--/Small news-->
-
-            <hr>
-          {% endfor %}
-
-          </div>
-          <!--Grid column-->
-
-
-
-
-          <!--Grid column-->
-          <div class="h-100 col-lg-6 col-md-12 pt-3">
-            
-          {% for element in benchmark_final_elements_s2 %}
-
-            <!--Small news-->
-            <div class="row">
-              <div class="col-md-3">
-
-                <!--Image-->
-                <div class="view overlay rounded z-depth-1">
-                  <img src="https://pbs.twimg.com/profile_images/692289216282112000/-WBe2yQi.jpg" class="img-fluid" alt="Minor sample post image">
-                  
-                    <div class="mask rgba-white-slight"></div>
-                
-                </div>
-              </div>
-
-              <!--Excerpt-->
-              <div class="col-md-9 pt-4">
-                
-                <a target="_blank" href="{{ element.0 }}" >
-
-                <p class="h6"><i class="pr-2 fas fa-link"></i> {{ element.1 }}</p>
-                  
-                </a>
-              </div>
-
-            </div>
-            <!--/Small news-->
-
-            <hr>
-          {% endfor %}
-
-          </div>
-          <!--Grid column-->
-
-
-
+       
 
           <!--Grid column-->
           <div class="h-100 col-lg-6 col-md-12">
