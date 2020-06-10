@@ -12,7 +12,11 @@ BENCHMARK_URL = 'https://www.benchmark.pl/'
 WYKOP_URL = 'https://www.wykop.pl/'
 ARCHEOLOGY_VIEW = 'https://www.zwiadowcahistorii.pl/'
 TOJUZBYLO_VIEW = 'https://tojuzbylo.pl/aktualnosci'
+<<<<<<< HEAD
 SPIDERS_WEB_VIEW ='https://www.spidersweb.pl/kategoria/glowna'
+=======
+
+>>>>>>> ecd98a128097ac970d13ced896362b128c402aaa
 
 
 def home_view(request):
@@ -190,6 +194,7 @@ class ToJuzByloView(View):
 
         except ObjectDoesNotExist:
             messages.warning(self.request, "You do not have an active order.")
+<<<<<<< HEAD
             return redirect("/")
 
 
@@ -228,4 +233,6 @@ class SpidersWebView(View):
 
         except ObjectDoesNotExist:
             messages.warning(self.request, "You do not have an active order.")
+=======
+>>>>>>> ecd98a128097ac970d13ced896362b128c402aaa
             return redirect("/")

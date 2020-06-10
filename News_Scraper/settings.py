@@ -29,8 +29,12 @@ SECRET_KEY = 'dfb%f0d82j=&s+w)=2f-%f1kj_h6p8h8#j)*ial)=5!0cdl4v-'
 DEBUG = True
 #os.environ.get('DEBUG')
 
+<<<<<<< HEAD
 ALLOWED_HOSTS = []
 #['.herokuapp.com',]
+=======
+ALLOWED_HOSTS = ['.herokuapp.com']
+>>>>>>> ecd98a128097ac970d13ced896362b128c402aaa
 
 
 # Application definition
