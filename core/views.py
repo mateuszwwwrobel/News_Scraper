@@ -12,7 +12,7 @@ BENCHMARK_URL = 'https://www.benchmark.pl/'
 WYKOP_URL = 'https://www.wykop.pl/'
 ARCHEOLOGY_VIEW = 'https://www.zwiadowcahistorii.pl/'
 TOJUZBYLO_VIEW = 'https://tojuzbylo.pl/aktualnosci'
-SPIDERS_WEB_VIEW ='https://www.spidersweb.pl/kategoria/glowna'
+COMPUTER_WORLD_WEB_VIEW ='https://www.computerworld.pl/'
 
 
 def home_view(request):
@@ -194,37 +194,37 @@ class ToJuzByloView(View):
 
 
 
-class SpidersWebView(View):
+class ComputerWorldView(View):
     def get(self, *args, **kwargs):
         try:
-            spiders_url = SPIDERS_WEB_VIEW
-            spiders_response = requests.get(spiders_url)
-            spiders_data = spiders_response.text
-            spiders_soup = BeautifulSoup(spiders_data, 'html.parser')
+            computer_world_url = COMPUTER_WORLD_WEB_VIEW
+            computer_world_response = requests.get(computer_world_url)
+            computer_world_data = computer_world_response.text
+            computer_world_soup = BeautifulSoup(computer_world_data, 'html.parser')
             
             #SOUP:
-            first_part_of_soup = spiders_soup.find_all('article', {'class': 'article'})
-            
-            
-            spiders_final_elements = []
+            main_computer_world_soup = computer_world_soup.find('div', {'class': 'left-side'})
+            ingredient_one = main_computer_world_soup.find_all('div', {'class': 'row-item-icon'})    
 
-            for element in first_part_of_soup:
-                spiders_title = element.find('span',{'class': 'postlink-inner'}).text
-                spiders_image = element.find('img', {'class': 'b-lazy'})['data-src']
-                spiders_href_1 = element.find_all('h1', {'class': 'title font25-size'})
-                for item in spiders_href_1:
-                    spiders_href = item.find('a')['href']
+            
+            computer_world_final_elements = []
+
+
+            for element in ingredient_one:
+                computer_world_image = element.find('img', {'class': 'img-fluid'})['src']
+                computer_world_href_1 = element.find('a')['href']
+                computer_world_href = f"https://www.computerworld.pl{computer_world_href_1}"
+                computer_world_title = element.find('a')['href'].split(',')[0].split('/')[2].replace('-',(' '))
+
+                computer_world_final_elements.append((computer_world_title, computer_world_image, computer_world_href)) 
                 
-
-                    spiders_final_elements.append((spiders_title, spiders_image, spiders_href)) 
-
             
             context = {
-                'spiders_final_elements': spiders_final_elements,
+                'computer_world_final_elements': computer_world_final_elements,
             }
             
             
-            return render(self.request, 'spider_news.html', context,)
+            return render(self.request, 'computer_world_news.html', context,)
 
         except ObjectDoesNotExist:
             messages.warning(self.request, "You do not have an active order.")
