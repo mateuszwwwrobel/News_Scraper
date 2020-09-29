@@ -1,5 +1,9 @@
 {% extends 'base.html' %}
 
+{% block title %}
+  <title>Tasty News</title>
+{% endblock title %}
+
 {% block content %}
 
  <!--Main layout--> 
@@ -31,9 +35,9 @@
 
             <a href="{% url 'core:archeology-page' %}" class="list-group-item list-group-item-action list-group-item-primary"><i class="fas fa-landmark mr-3"></i>Zwiadowca Historii - Archeologia</a>
 
-            <a href="{% url 'core:tojuzbylo-page' %}" class="list-group-item list-group-item-action list-group-item-primary"><i class="fas fa-landmark mr-3"></i>To Już Było - Historia</a>
+            <a href="{% url 'core:tojuzbylo-page' %}" class="list-group-item list-group-item-action list-group-item-primary"><i class="fas fa-monument mr-3"></i>To Już Było - Historia</a>
 
-            <a href="{% url 'core:computer-world-page' %}" class="list-group-item list-group-item-action list-group-item-primary"><i class="fas fa-landmark mr-3"></i>Computer World - IT</a>
+            <a href="{% url 'core:computer-world-page' %}" class="list-group-item list-group-item-action list-group-item-primary"><i class="fas fa-laptop mr-3"></i></i>Computer World - IT</a>
 
             <a href="#" class="list-group-item list-group-item-action list-group-item-dark"></a>
 
