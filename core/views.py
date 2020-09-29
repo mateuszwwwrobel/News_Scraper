@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.core.exceptions import ObjectDoesNotExist
 from django.views.generic import View
 from .models import Benchmark, Wykop
@@ -82,11 +82,11 @@ class WykopView(View):
             
             #SOUP with url and title:
             first_part_of_soup = wykop_soup.find_all("a", {"rel": 'noopener'})
-            
+
             #<a> tag with href and title.
-            shorter_first_part_of_soup = list(itertools.islice(first_part_of_soup,1,None,3))
+            shorter_first_part_of_soup = list(itertools.islice(first_part_of_soup, 1, None, 3))
             ready_first_part_of_soup = list(shorter_first_part_of_soup[3:])
-            
+      
             wykop_final_elements = []
 
             for items in ready_first_part_of_soup:
