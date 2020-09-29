@@ -28,8 +28,6 @@ class BenchmarkView(View):
             benchmark_soup = BeautifulSoup(benchmark_data, 'html.parser')
             benchmark_url_maker = "http://benchmark.pl{}"
 
-            benchmark_final_elements_s1 = []
-            
 
             benchmark_ready_soup = benchmark_soup.find_all('section')
             
@@ -132,8 +130,6 @@ class ArcheologyView(View):
                     archeo_title = element.find('a')['title']
                     archeo_link = element.find('a')['href']
                     archeo_image = element.find('img')['data-img-url']
-                    
-                    
 
 
                     archeo_final_elements.append((archeo_title, archeo_link, archeo_image)) 
@@ -149,8 +145,6 @@ class ArcheologyView(View):
         except ObjectDoesNotExist:
             messages.warning(self.request, "Something is wrong.")
             return redirect("/")
-
-
 
 
 class ToJuzByloView(View):
@@ -177,14 +171,11 @@ class ToJuzByloView(View):
                     tojuzbylo_href_body = element.find_all('a')[1]['href']
                     tojuzbylo_href = f"https://tojuzbylo.pl/{tojuzbylo_href_body}"
 
-
-
                     tojuzbylo_final_elements.append((tojuzbylo_title, tojuzbylo_image, tojuzbylo_href)) 
 
             context = {
                 'tojuzbylo_final_elements': tojuzbylo_final_elements,
             }
-            
             
             return render(self.request, 'tojuzbylo.html', context,)
 
