@@ -68,7 +68,7 @@ class BenchmarkView(View):
             return render(self.request, 'benchmark.html', context)
 
         except ObjectDoesNotExist:
-            messages.warning(self.request, "You do not have an active order.")
+            messages.warning(self.request, "Something is wrong.")
             return redirect("/")
     
 
@@ -106,7 +106,7 @@ class WykopView(View):
             return render(self.request, 'wykop.html', context,)
 
         except ObjectDoesNotExist:
-            messages.warning(self.request, "You do not have an active order.")
+            messages.warning(self.request, "Something is wrong.")
             return redirect("/")
 
 
@@ -147,7 +147,7 @@ class ArcheologyView(View):
             return render(self.request, 'archeology.html', context,)
 
         except ObjectDoesNotExist:
-            messages.warning(self.request, "You do not have an active order.")
+            messages.warning(self.request, "Something is wrong.")
             return redirect("/")
 
 
@@ -189,7 +189,7 @@ class ToJuzByloView(View):
             return render(self.request, 'tojuzbylo.html', context,)
 
         except ObjectDoesNotExist:
-            messages.warning(self.request, "You do not have an active order.")
+            messages.warning(self.request, "Something is wrong.")
             return redirect("/")
 
 
@@ -227,5 +227,5 @@ class ComputerWorldView(View):
             return render(self.request, 'computer_world_news.html', context,)
 
         except ObjectDoesNotExist:
-            messages.warning(self.request, "You do not have an active order.")
+            messages.warning(self.request, "Something is wrong.")
             return redirect("/") 
