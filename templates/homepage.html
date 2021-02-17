@@ -1,61 +1,72 @@
 {% extends 'base.html' %}
 
 {% block title %}
-  <title>Tasty News</title>
+<title>Tasty News</title>
 {% endblock title %}
 
 {% block content %}
 
- <!--Main layout--> 
-  <main class="mt-2 pt-2">
+<!--Main layout-->
+<main class="mt-2 pt-2">
     <div class="container">
 
-      <hr class="my-5">
+        <hr class="my-5">
 
-      <!--Section: Magazine v.1-->
-      <section class="wow fadeIn">
+        <!--Section: Magazine v.1-->
+        <section class="wow fadeIn">
 
-        <!--Section heading-->
-        <h2 class="h1 text-center my-5 font-weight-bold">Tasty News</h2>
+            <!--Section heading-->
+            <h2 class="h1 text-center my-5 font-weight-bold">Tasty News</h2>
 
-        <h4 class="h4 text-center my-5 font-weight-bold">Choose one of the website below to read some Tasty News</h4>
+            <h4 class="h4 text-center my-5 font-weight-bold">Choose one of the website below to read some Tasty
+                News</h4>
 
-        <!--Grid row-->
-        <div class="justify-content-center row text-left mb-5">
-
-
-          <div class="list-group col-lg-8 col-md-12">
+            <!--Grid row-->
+            <div class="justify-content-center row text-left mb-5">
 
 
-            <a href="#" class="list-group-item list-group-item-action list-group-item-dark"><strong>Choose a website:</strong></a>
-
-            <a href="{% url 'core:benchmark-page' %}" class="list-group-item list-group-item-action list-group-item-primary"><i class="fas fa-tv mr-3"></i>Benchmark.pl - Technologia</a>
-
-            <a href="{% url 'core:wykop-page' %}" class="list-group-item list-group-item-action list-group-item-primary"><i class="fas fa-book-open mr-3"></i>Wykop.pl - Wiadomości</a>
-
-            <a href="{% url 'core:archeology-page' %}" class="list-group-item list-group-item-action list-group-item-primary"><i class="fas fa-landmark mr-3"></i>Zwiadowca Historii - Archeologia</a>
-
-            <a href="{% url 'core:tojuzbylo-page' %}" class="list-group-item list-group-item-action list-group-item-primary"><i class="fas fa-monument mr-3"></i>To Już Było - Historia</a>
-
-            <a href="{% url 'core:computer-world-page' %}" class="list-group-item list-group-item-action list-group-item-primary"><i class="fas fa-laptop mr-3"></i></i>Computer World - IT</a>
-
-            <a href="#" class="list-group-item list-group-item-action list-group-item-dark"></a>
+                <div class="list-group col-lg-8 col-md-12">
 
 
-          </div>
+                    <a href="#" class="list-group-item list-group-item-action list-group-item-dark"><strong>Choose a
+                        website:</strong></a>
+
+                    <a href="{% url 'core:benchmark-page' %}"
+                       class="list-group-item list-group-item-action list-group-item-primary"><i
+                            class="fas fa-tv mr-3"></i>Benchmark.pl - Technologia</a>
+
+                    <a href="{% url 'core:wykop-page' %}"
+                       class="list-group-item list-group-item-action list-group-item-primary"><i
+                            class="fas fa-book-open mr-3"></i>Wykop.pl - Wiadomości</a>
+
+                    <a href="{% url 'core:archeology-page' %}"
+                       class="list-group-item list-group-item-action list-group-item-primary"><i
+                            class="fas fa-landmark mr-3"></i>Zwiadowca Historii - Archeologia</a>
+
+                    <a href="{% url 'core:tojuzbylo-page' %}"
+                       class="list-group-item list-group-item-action list-group-item-primary"><i
+                            class="fas fa-monument mr-3"></i>To Już Było - Historia</a>
+
+                    <a href="{% url 'core:computer-world-page' %}"
+                       class="list-group-item list-group-item-action list-group-item-primary"><i
+                            class="fas fa-laptop mr-3"></i></i>Computer World - IT</a>
+
+                    <a href="#" class="list-group-item list-group-item-action list-group-item-dark"></a>
 
 
-        </div>
-        <!--Grid row-->
+                </div>
 
-      </section>
-      <!--/Section: Magazine v.1-->
+
+            </div>
+            <!--Grid row-->
+
+        </section>
+        <!--/Section: Magazine v.1-->
 
 
     </div>
-  </main>
-  <!--Main layout-->
-
+</main>
+<!--Main layout-->
 
 
 {% endblock content %}
