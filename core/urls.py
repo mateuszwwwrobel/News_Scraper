@@ -1,15 +1,14 @@
-from django.contrib import admin
 from django.urls import path
-from .views import home_view, BenchmarkView, WykopView, ArcheologyView, ToJuzByloView, ComputerWorldView
+from .views import HomeView, BenchmarkView, WykopView, ArcheologyView, ToJuzByloView, ComputerWorldView
 
 app_name = 'core'
 
 urlpatterns = [
-    path('', home_view, name="home-page"),
-    path('benchmark-page', BenchmarkView.as_view(), name="benchmark-page"),
-    path('wykop-page', WykopView.as_view(), name="wykop-page"),
-    path('archeology-page', ArcheologyView.as_view(), name="archeology-page"),
-    path('tojuzbylo-page', ToJuzByloView.as_view(), name="tojuzbylo-page"),
-    path('computer-world-page', ComputerWorldView.as_view(), name="computer-world-page"),
+    path('', HomeView.as_view(), name="home"),
+    path('benchmark', BenchmarkView.as_view(), name="benchmark"),
+    path('wykop', WykopView.as_view(), name="wykop"),
+    path('archeology', ArcheologyView.as_view(), name="archeology"),
+    path('tojuzbylo', ToJuzByloView.as_view(), name="tojuzbylo"),
+    path('computerworld', ComputerWorldView.as_view(), name="computer-world"),
 
     ]
