@@ -1,27 +1,20 @@
 from django.db import models
 
-# Create your models here.
+portals = (
+    ('Benchmark.pl', 'Benchmark.pl'),
+    ('Wykop.pl', 'Wykop.pl'),
+    ('Tojuzbylo.pl', 'Tojuzbylo.pl'),
+    ('Zwiadowca Historii', 'Zwiadowca Historii'),
+    ('Computer World', 'Computer World'),
+)
 
 
-class Benchmark(models.Model):
-    article_title = models.CharField(max_length=256)
-    article_date = models.DateField(auto_now=False, auto_now_add=False)
-    article_author = models.CharField(max_length=100)
-    article_url = models.URLField()
- 
+class Article(models.Model):
+    portal = models.CharField(max_length=100, choices=portals)
+    title = models.CharField(max_length=256)
+    author = models.CharField(max_length=50, default='Author')
+    date_created = models.DateTimeField(auto_now_add=True)
+    url = models.URLField()
+
     def __str__(self):
-        return self.article_title
-
-
-class Wykop(models.Model):
-    article_title = models.CharField(max_length=256)
-    article_date = models.DateField(auto_now=False, auto_now_add=False)
-    article_author = models.CharField(max_length=100)
-    article_url = models.URLField()
-    article_image = models.URLField()
- 
-    def __str__(self):
-        return self.article_title
-
-
-
+        return f'{self.portal} - {self.title}'
