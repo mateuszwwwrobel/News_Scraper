@@ -1,7 +1,8 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block title %}
-<title>Zwiadowca Historii</title>
+<title>Board Games Geek</title>
 {% endblock title %}
 
 {% block content %}
@@ -10,13 +11,14 @@
 <main class="mt-5 pt-5">
     <div class="container">
 
+
         <hr class="my-5">
 
         <!--Section: Magazine v.1-->
         <section class="wow fadeIn">
 
             <!--Section heading-->
-            <h2 class="h1 text-center my-5 font-weight-bold">Zwiadowca Historii - Tasty News</h2>
+            <h2 class="h1 text-center my-5 font-weight-bold">Board Games Geek - Tasty News</h2>
 
             <!--Grid row-->
             <div class="row text-left">
@@ -24,14 +26,15 @@
                 <!--Grid column-->
                 <div class="col-lg-6 col-md-12 h-100">
 
-                    {% for element in zwiad_historii_data %}
+                    {% for element in bgg_data %}
                     <!--Small news-->
                     <div class="row">
                         <div class="col-md-3">
 
                             <!--Image-->
                             <div class="view overlay rounded z-depth-1">
-                                <img src="{{ element.2 }}" class="img-fluid" alt="Minor sample post image">
+                                <img src="{% static 'img/bgg.png'%}"
+                                     class="img-fluid" alt="Minor sample post image">
                                 <a>
                                     <div class="mask rgba-white-slight"></div>
                                 </a>
