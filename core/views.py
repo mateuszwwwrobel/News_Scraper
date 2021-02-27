@@ -1,6 +1,4 @@
-from django.contrib import messages
-from django.shortcuts import render, redirect
-from django.core.exceptions import ObjectDoesNotExist
+from django.shortcuts import render
 from django.views.generic import View, TemplateView
 from .models import Article, portals
 from utils.utils import parse_a_website
@@ -15,8 +13,19 @@ PYTHON_WEB_URL = 'https://www.infoworld.com/uk/category/python/'
 REAL_PYTHON_WEB_URL = 'https://realpython.com/'
 BUSHCRAFTABLE_URL = 'https://bushcraftable.com/'
 
+
 class HomeView(TemplateView):
     template_name = 'homepage.html'
+
+
+class StatisticsView(View):
+    def get(self):
+
+        context = {
+
+        }
+
+        return render(self.request, 'statistics.html', context)
 
 
 class BenchmarkView(View):
@@ -257,9 +266,8 @@ class BushcraftableView(View):
 
 # soup.find_all(lambda tag: tag.name == 'p' and 'et' in tag.text)
 
-# TODO: Widok statystyk. Obliczenie ilości artykułów i piechart na widoku statystycznym,
 
-# TODO: Uporządkowanie navbaru. Footera? Frontend.
+# TODO: Widok statystyk. Obliczenie ilości artykułów i piechart na widoku statystycznym,
 
 # TODO: Settingsy porownac do django projektu KWL/Inforshare i pozmieniać.
 
