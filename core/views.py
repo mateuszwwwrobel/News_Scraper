@@ -201,7 +201,7 @@ class ComputerWorldView(View):
             computer_world_final_elements = []
 
 
-            for element in ingredient_one:
+        for element in ingredient_one:
                 computer_world_image = element.find('img', {'class': 'img-fluid'})['src']
                 computer_world_href_1 = element.find('a')['href']
                 computer_world_href = f"https://www.computerworld.pl{computer_world_href_1}"
