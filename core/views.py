@@ -3,17 +3,16 @@ from django.shortcuts import render, redirect
 from django.core.exceptions import ObjectDoesNotExist
 from django.views.generic import View, TemplateView
 from .models import Article, portals
-from bs4 import BeautifulSoup
-import requests
-import itertools
+from utils.utils import parse_a_website
 
 
 BENCHMARK_URL = 'https://www.benchmark.pl/'
-WYKOP_URL = 'https://www.wykop.pl/'
-ARCHEOLOGY_VIEW = 'https://www.zwiadowcahistorii.pl/'
-TOJUZBYLO_VIEW = 'https://tojuzbylo.pl/aktualnosci'
-COMPUTER_WORLD_WEB_VIEW ='https://www.computerworld.pl/'
-
+BGG_URL = 'https://boardgamegeek.com/blog/1/boardgamegeek-news'
+ZWIAD_HISTORII_URL = 'https://www.zwiadowcahistorii.pl/'
+TOJUZBYLO_URL = 'https://tojuzbylo.pl/aktualnosci'
+COMPUTER_WORLD_WEB_URL = 'https://www.computerworld.pl/'
+PYTHON_WEB_URL = 'https://www.infoworld.com/uk/category/python/'
+REAL_PYTHON_WEB_URL = 'https://realpython.com/'
 
 class HomeView(TemplateView):
     template_name = 'homepage.html'
@@ -21,232 +20,214 @@ class HomeView(TemplateView):
 
 class BenchmarkView(View):
     def get(self, *args, **kwargs):
+        benchmark_soup = parse_a_website(BENCHMARK_URL)
 
-        benchmark_url = BENCHMARK_URL
-        benchmark_response = requests.get(benchmark_url)
-        benchmark_data = benchmark_response.text
-        benchmark_soup = BeautifulSoup(benchmark_data, 'html.parser')
-        benchmark_ready_soup = benchmark_soup.find_all('section')
+        # Getting data from soup
+        benchmark_data = []
 
-        # SECTION 3 - NEWS:
-        benchmark_final_elements_s3 = []
-
-        section_3 = benchmark_ready_soup[3]
+        sections = benchmark_soup.find_all('section')
+        section_3 = sections[3]
         section_3_divs = section_3.find_all('div')
 
         for post in section_3_divs[1:2]:
-            # Scraping information
             benchmark_li = post.find_all('li')
             for element in benchmark_li:
                 benchmark_title = element.find('a').text
                 benchmark_href = element.find('a')['href']
-                benchmark_url_maker = "http://benchmark.pl{}"
-                benchmark_link = (benchmark_url_maker.format(benchmark_href))
+                benchmark_url = f"http://benchmark.pl{benchmark_href}"
 
-                benchmark_final_elements_s3.append((benchmark_link, benchmark_title))
+                benchmark_data.append((benchmark_url, benchmark_title))
 
         # Creating Article
-        check_if_article_already_exist(benchmark_final_elements_s3, portals[0][0])
+        Article.check_if_article_already_exist(benchmark_data, portals[0][0])
 
-        if len(benchmark_final_elements_s3) == 0:
-            return render(
-                self.request,
-                'benchmark.html',
-                {'benchmark_final_elements_s3': [('#', 'No data to view. Contact with administrator.')]}
-            )
+        # Check if data not empty
+        if len(benchmark_data) == 0:
+            context = {'benchmark_data': [('#', 'No data to view. Contact with administrator.')]}
+            return render(self.request, 'benchmark.html', context)
 
         context = {
-            'benchmark_final_elements_s3': benchmark_final_elements_s3,
+            'benchmark_data': benchmark_data,
         }
-
         return render(self.request, 'benchmark.html', context)
 
 
-class WykopView(View):
+class BoardGamesGeekView(View):
     def get(self, *args, **kwargs):
-        wykop_url = WYKOP_URL
-        wykop_response = requests.get(wykop_url)
-        wykop_data = wykop_response.text
-        wykop_soup = BeautifulSoup(wykop_data, 'html.parser')
+        bgg_soup = parse_a_website(BGG_URL)
 
-        # SOUP with url and title:
-        first_part_of_soup = wykop_soup.find_all("a", {"rel": 'noopener'})
+        # Getting data from soup
+        bgg_data = []
+        posts = bgg_soup.find_all("h3", {"class": 'post_title'})
 
-        # <a> tag with href and title.
-        shorter_first_part_of_soup = list(itertools.islice(first_part_of_soup, 1, None, 3))
-        ready_first_part_of_soup = list(shorter_first_part_of_soup[3:])
-        print(ready_first_part_of_soup)
-
-        wykop_final_elements = []
-
-        for items in ready_first_part_of_soup:
-            wykop_link = items['href']
-            wykop_title = items['title']
-
-            wykop_final_elements.append((wykop_link, wykop_title))
+        for items in posts:
+            bgg_post_title = items.find('a').text
+            bgg_post_link = items.find('a')['href']
+            bgg_data.append((bgg_post_link, bgg_post_title))
 
         # Creating Article
-        check_if_article_already_exist(wykop_final_elements, portals[1][1])
+        Article.check_if_article_already_exist(bgg_data, portals[1][1])
 
-        if len(wykop_final_elements) == 0:
-            return render(
-                self.request,
-                'wykop.html',
-                {'wykop_final_elements': [('#', 'No data to view. Contact with administrator.')]}
-            )
+        # Check if data not empty
+        if len(bgg_data) == 0:
+            context = {'bgg_data': [('#', 'No data to view. Contact with administrator.')]}
+            return render(self.request, 'bgg.html', context)
 
         context = {
-            'wykop_final_elements': wykop_final_elements,
+            'bgg_data': bgg_data,
         }
-
-        return render(self.request, 'wykop.html', context,)
+        return render(self.request, 'bgg.html', context,)
 
 
 class ArcheologyView(View):
     def get(self, *args, **kwargs):
-        archeo_url = ARCHEOLOGY_VIEW
-        archeo_response = requests.get(archeo_url)
-        archeo_data = archeo_response.text
-        archeo_soup = BeautifulSoup(archeo_data, 'html.parser')
+        zwiad_historii_soup = parse_a_website(ZWIAD_HISTORII_URL)
 
-        #SOUP with url and title and img:
-        first_part_of_soup = archeo_soup.find_all("div", {"class": 'td_module_1 td_module_wrap td-animation-stack'})
+        # Getting data from soup
+        zwiad_historii_data = []
+        data = zwiad_historii_soup.find_all("div", {"class": 'td_module_1 td_module_wrap td-animation-stack'})
 
-        archeo_final_elements = []
-
-        for item in first_part_of_soup:
+        for item in data:
             archeo_stuff = item.find_all('div', {'class': 'td-module-thumb'})
             for element in archeo_stuff:
                 archeo_title = element.find('a')['title']
                 archeo_link = element.find('a')['href']
                 archeo_image = element.find('img')['data-img-url']
-                archeo_final_elements.append((archeo_link, archeo_title, archeo_image))
+                zwiad_historii_data.append((archeo_link, archeo_title, archeo_image))
 
         # Creating Article
-        check_if_article_already_exist(archeo_final_elements, portals[3][1])
+        Article.check_if_article_already_exist(zwiad_historii_data, portals[3][1])
 
-        if len(archeo_final_elements) == 0:
-            return render(
-                self.request,
-                'wykop.html',
-                {'archeo_final_elements': [('#', 'No data to view. Contact with administrator.')]}
-            )
+        if len(zwiad_historii_data) == 0:
+            context = {'zwiad_historii_data': [('#', 'No data to view. Contact with administrator.')]}
+            return render(self.request, 'archeology.html', context)
 
         context = {
-            'archeo_final_elements': archeo_final_elements,
+            'zwiad_historii_data': zwiad_historii_data,
         }
-
-        return render(self.request, 'archeology.html', context,)
+        return render(self.request, 'archeology.html', context)
 
 
 class ToJuzByloView(View):
     def get(self, *args, **kwargs):
-        tojuzbylo_url = TOJUZBYLO_VIEW
-        tojuzbylo_response = requests.get(tojuzbylo_url)
-        tojuzbylo_data = tojuzbylo_response.text
-        tojuzbylo_soup = BeautifulSoup(tojuzbylo_data, 'html.parser')
+        tojuzbylo_soup = parse_a_website(TOJUZBYLO_URL)
 
-        #SOUP:
+        # Getting data from soup
+        tojuzbylo_data = []
         first_part_of_soup = tojuzbylo_soup.find_all('td', {'class': 'col-1 col-first'})
-
-
-        tojuzbylo_final_elements = []
 
         for element in first_part_of_soup:
             tojuzbylo_title = element.find('h2', {'class': 'tytul'}).text
-            tojuzbylo_href_and_image = element.find_all('div', {'class': 'picture'})
-
-
-            for item in tojuzbylo_href_and_image:
-                tojuzbylo_image = element.find('img')['src']
-                tojuzbylo_href_body = element.find_all('a')[1]['href']
-                tojuzbylo_href = f"https://tojuzbylo.pl/{tojuzbylo_href_body}"
-
-                tojuzbylo_final_elements.append((tojuzbylo_href, tojuzbylo_title, tojuzbylo_image))
+            tojuzbylo_image = element.find('img')['src']
+            tojuzbylo_href_body = element.find_all('a')[1]['href']
+            tojuzbylo_href = f"https://tojuzbylo.pl/{tojuzbylo_href_body}"
+            tojuzbylo_data.append((tojuzbylo_href, tojuzbylo_title, tojuzbylo_image))
 
         # Creating Article
-        check_if_article_already_exist(tojuzbylo_final_elements, portals[2][1])
+        Article.check_if_article_already_exist(tojuzbylo_data, portals[2][1])
 
-        if len(tojuzbylo_final_elements) == 0:
-            return render(
-                self.request,
-                'wykop.html',
-                {'tojuzbylo_final_elements': [('#', 'No data to view. Contact with administrator.')]}
-            )
+        if len(tojuzbylo_data) == 0:
+            context = {'tojuzbylo_data': [('#', 'No data to view. Contact with administrator.')]}
+            return render(self.request, 'tojuzbylo.html', context)
 
         context = {
-            'tojuzbylo_final_elements': tojuzbylo_final_elements,
+            'tojuzbylo_data': tojuzbylo_data,
         }
-
         return render(self.request, 'tojuzbylo.html', context,)
 
 
 class ComputerWorldView(View):
     def get(self, *args, **kwargs):
-        try:
-            computer_world_url = COMPUTER_WORLD_WEB_VIEW
-            computer_world_response = requests.get(computer_world_url)
-            computer_world_data = computer_world_response.text
-            computer_world_soup = BeautifulSoup(computer_world_data, 'html.parser')
-            
-            #SOUP:
-            main_computer_world_soup = computer_world_soup.find('div', {'class': 'left-side'})
-            ingredient_one = main_computer_world_soup.find_all('div', {'class': 'row-item-icon'})    
+        computer_world_soup = parse_a_website(COMPUTER_WORLD_WEB_URL)
 
-            computer_world_final_elements = []
+        # Getting data from soup
+        computer_world_data = []
+        main_computer_world_soup = computer_world_soup.find('div', {'class': 'left-side'})
+        ingredient_one = main_computer_world_soup.find_all('div', {'class': 'row-item-icon'})
 
-            for element in ingredient_one:
-                computer_world_image = element.find('img', {'class': 'img-fluid'})['src']
-                computer_world_href_1 = element.find('a')['href']
-                computer_world_href = f"https://www.computerworld.pl{computer_world_href_1}"
-                computer_world_title = element.find('a')['href'].split(',')[0].split('/')[2].replace('-', (' '))
+        for element in ingredient_one:
+            computer_world_image = element.find('img', {'class': 'img-fluid'})['src']
+            computer_world_href_1 = element.find('a')['href']
+            computer_world_url = f"https://www.computerworld.pl{computer_world_href_1}"
+            computer_world_title = element.find('a')['href'].split(',')[0].split('/')[2].replace('-', (' '))
 
-                computer_world_final_elements.append((computer_world_href, computer_world_title, computer_world_image))
+            computer_world_data.append((computer_world_url, computer_world_title, computer_world_image))
 
-            # Creating Article
-            check_if_article_already_exist(computer_world_final_elements, portals[4][1])
+        # Creating Article
+        Article.check_if_article_already_exist(computer_world_data, portals[4][1])
 
-            if len(computer_world_final_elements) == 0:
-                return render(
-                    self.request,
-                    'wykop.html',
-                    {'computer_world_final_elements': [('#', 'No data to view. Contact with administrator.')]}
-                )
-            
-            context = {
-                'computer_world_final_elements': computer_world_final_elements,
-            }
-            
-            
-            return render(self.request, 'computer_world_news.html', context,)
+        if len(computer_world_data) == 0:
+            context = {'computer_world_data': [('#', 'No data to view. Contact with administrator.')]}
+            return render(self.request, 'computer_world_news.html', context)
 
-        except ObjectDoesNotExist:
-            messages.warning(self.request, "Something is wrong.")
-            return redirect("/")
+        context = {
+            'computer_world_data': computer_world_data,
+        }
+        return render(self.request, 'computer_world_news.html', context,)
 
 
-def check_if_article_already_exist(posts_list, portal) -> None:
-    all_articles = Article.objects.filter(portal=portal)
-    article_list = []
-    [article_list.append(article.url) for article in all_articles]
+class PythonView(View):
+    def get(self, *args, **kwargs):
+        python_soup = parse_a_website(PYTHON_WEB_URL)
 
-    for post in posts_list:
-        if post[0] in article_list:
-            continue
-        else:
-            create_article(post[1], post[0], portal)
+        # Getting data from soup
+        python_data = []
+        python_divs = python_soup.find_all('div', {'class': 'post-cont'})
+        python_figs = python_soup.find_all('figure', {'class': 'well-img'})
+
+        for div, figure in zip(python_divs, python_figs):
+            python_href = div.find('a')['href']
+            python_title = div.find('a').text
+            python_url = f'https://www.infoworld.com{python_href}'
+            python_image = figure.find('img')['data-original']
+
+            python_data.append((python_url, python_title, python_image))
+
+        # Creating Article
+        Article.check_if_article_already_exist(python_data, portals[5][1])
+
+        if len(python_data) == 0:
+            context = {'python_data': [('#', 'No data to view. Contact with administrator.')]}
+            return render(self.request, 'computer_world_news.html', context)
+
+        context = {
+            'python_data': python_data,
+        }
+        return render(self.request, 'python.html', context)
 
 
-def create_article(title, url, portal) -> None:
-    if title == '' or url == '':
-        pass
-    else:
-        article = Article(
-            portal=portal,
-            title=title,
-            url=url,
-        )
-        article.save()
+class RealPythonView(View):
+    def get(self, *args, **kwargs):
+        soup = parse_a_website(REAL_PYTHON_WEB_URL)
+
+        # Getting data from soup
+        data = []
+
+        posts = soup.find_all('div', {'class': 'card border-0'})
+        print(posts)
+
+        # data.append((url, title, image))
+
+        # Creating Article
+        Article.check_if_article_already_exist(data, portals[6][1])
+
+        # if len(data) == 0:
+        #     context = {'data': [('#', 'No data to view. Contact with administrator.')]}
+        #     return render(self.request, 'computer_world_news.html', context)
+
+        context = {
+            'data': data,
+        }
+        return render(self.request, 'real_python.html', context)
 
 
-    # soup.find_all(lambda tag: tag.name == 'p' and 'et' in tag.text)
+# soup.find_all(lambda tag: tag.name == 'p' and 'et' in tag.text)
+
+
+# TODO: new pages: jakas z board games? bushcraftowa moze? jakas Pythonowa? IT? Wykop wylatuje na produkcje.
+
+# TODO: Widok statystyk. Obliczenie ilości artykułów i piechart na widoku statystycznym,
+
+# TODO: Uporządkowanie navbaru. Footera? Frontend.
+
+# TODO: Settingsy porownac do django projektu KWL/Inforshare i pozmieniać.
