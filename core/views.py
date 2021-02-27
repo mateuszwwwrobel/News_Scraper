@@ -243,7 +243,7 @@ class BushcraftableView(View):
             data.append((url, title, img))
 
         # Creating Article
-        Article.check_if_article_already_exist(data, portals[6][1])
+        Article.check_if_article_already_exist(data, portals[7][1])
 
         if len(data) == 0:
             context = {'data': [('#', 'No data to view. Contact with administrator.')]}
