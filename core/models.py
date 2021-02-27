@@ -8,7 +8,7 @@ portals = (
     ('Computer World', 'Computer World'),
     ('InfoWorldPython.com', 'InfoWorldPython.com'),
     ('RealPython.com', 'RealPython.com'),
-
+    ('bushcraftable.com', 'bushcraftable.com'),
 )
 
 
