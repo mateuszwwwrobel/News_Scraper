@@ -231,3 +231,4 @@ class RealPythonView(View):
 # TODO: Uporządkowanie navbaru. Footera? Frontend.
 
 # TODO: Settingsy porownac do django projektu KWL/Inforshare i pozmieniać.
+
