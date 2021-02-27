@@ -226,6 +226,34 @@ class RealPythonView(View):
         return render(self.request, 'real_python.html', context)
 
 
+class BushcraftableView(View):
+    def get(self, *args, **kwargs):
+        soup = parse_a_website(BUSHCRAFTABLE_URL)
+
+        # Getting data from soup
+        data = []
+
+        post_headers = soup.find_all('h2', {'class': 'entry-title'})
+        post_images = soup.find_all('div', {'class': 'post-image'})
+
+        for header, image in zip(post_headers, post_images):
+            url = header.find('a')['href']
+            title = header.find('a').text
+            img = image.find('img')['src']
+            data.append((url, title, img))
+
+        # Creating Article
+        Article.check_if_article_already_exist(data, portals[6][1])
+
+        if len(data) == 0:
+            context = {'data': [('#', 'No data to view. Contact with administrator.')]}
+            return render(self.request, 'bushcraftable.html', context)
+
+        context = {
+            'data': data,
+        }
+        return render(self.request, 'bushcraftable.html', context)
+
 
 # soup.find_all(lambda tag: tag.name == 'p' and 'et' in tag.text)
 
