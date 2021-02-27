@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block title %}
 <title>Benchmark</title>
@@ -26,7 +27,7 @@
                 <!--Grid column-->
                 <div class="h-100 col-lg-6 col-md-12">
                     <h4><strong>Newsy:</strong></h4>
-                    {% for element in benchmark_data %}
+                    {% for element in data %}
 
                     <!--Small news-->
                     <div class="row">
@@ -34,7 +35,7 @@
 
                             <!--Image-->
                             <div class="view overlay rounded z-depth-1">
-                                <img src="https://pbs.twimg.com/profile_images/692289216282112000/-WBe2yQi.jpg"
+                                <img src="{% static 'img/benchmark.webp'%}"
                                      class="img-fluid" alt="Minor sample post image">
                                 <div class="mask rgba-white-slight"></div>
                             </div>
