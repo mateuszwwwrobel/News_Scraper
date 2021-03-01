@@ -1,6 +1,10 @@
+from collections import Counter
+from random import randint
+
+from django.http import JsonResponse
 from django.shortcuts import render
 from django.views.generic import View, TemplateView
-from .models import Article, portals
+from .models import Article, portals, languages
 from utils.utils import parse_a_website
 
 
@@ -19,13 +23,96 @@ class HomeView(TemplateView):
 
 
 class StatisticsView(View):
-    def get(self):
+    def get(self, request):
+        # most_frequently_used_word = by website / general
+        return render(self.request, 'statistics.html')
+
+    def get_all_article_pie_chart_data(self):
+        all_articles = list(Article.objects.all().values_list('portal', flat=True))
+        articles = Counter(all_articles)
+
+        colors = []
+        for color in range(len(articles)):
+            color = '#%06x' % randint(0, 0xFFFFFF)
+            colors.append(color)
 
         context = {
-
+            'labels': list(articles.keys()),
+            'data': list(articles.values()),
+            'colors': colors,
         }
 
-        return render(self.request, 'statistics.html', context)
+        return JsonResponse(data=context)
+
+    def get_all_article_tab_chart_data(self):
+        all_articles = list(Article.objects.all().values_list('portal', flat=True))
+        articles = Counter(all_articles)
+        sorted_articles = dict(sorted(articles.items(), key=lambda item: item[1], reverse=True))
+
+        colors = []
+        for color in range(len(articles)):
+            color = '#%06x' % randint(0, 0xFFFFFF)
+            colors.append(color)
+
+        context = {
+            'labels': list(sorted_articles.keys()),
+            'data': list(sorted_articles.values()),
+            'colors': colors,
+        }
+
+        return JsonResponse(data=context)
+
+    def get_top_en_word_chart_data(self):
+        all_titles = list(Article.objects.filter(language='ENG').values_list('title', flat=True))
+
+        top_words = []
+        for title in all_titles:
+            split_title = title.split(' ')
+            for word in split_title:
+                if len(word) > 3:
+                    top_words.append(word.lower())
+
+        count_top_words = Counter(top_words)
+        sorted_words = dict(sorted(count_top_words.items(), key=lambda item: item[1], reverse=True))
+
+        colors = []
+        for color in range(10):
+            color = '#%06x' % randint(0, 0xFFFFFF)
+            colors.append(color)
+
+        context = {
+            'labels': list(sorted_words.keys())[:10],
+            'data': list(sorted_words.values())[:10],
+            'colors': colors,
+        }
+
+        return JsonResponse(data=context)
+
+    def get_top_pl_word_chart_data(self):
+        all_titles = list(Article.objects.filter(language='PL').values_list('title', flat=True))
+
+        top_words = []
+        for title in all_titles:
+            split_title = title.split(' ')
+            for word in split_title:
+                if len(word) > 3:
+                    top_words.append(word.lower())
+
+        count_top_words = Counter(top_words)
+        sorted_words = dict(sorted(count_top_words.items(), key=lambda item: item[1], reverse=True))
+
+        colors = []
+        for color in range(10):
+            color = '#%06x' % randint(0, 0xFFFFFF)
+            colors.append(color)
+
+        context = {
+            'labels': list(sorted_words.keys())[:10],
+            'data': list(sorted_words.values())[:10],
+            'colors': colors,
+        }
+
+        return JsonResponse(data=context)
 
 
 class BenchmarkView(View):
@@ -42,14 +129,12 @@ class BenchmarkView(View):
         for div in section_3_divs[1:2]:
             benchmark_li = div.find_all('li')
             for li in benchmark_li:
-                title = li.find('a').text
-                href = li.find('a')['href']
-                url = f"http://benchmark.pl{href}"
-
+                title = (li.find('a').text).split('\t\t\t')[1].split('\n')[0]
+                url = f"http://benchmark.pl{li.find('a')['href']}"
                 data.append((url, title))
 
         # Creating Article
-        Article.check_if_article_already_exist(data, portals[0][0])
+        Article.check_if_article_already_exist(data, portals[0][0], languages[0][1])
 
         # Check if data not empty
         if len(data) == 0:
@@ -71,12 +156,12 @@ class BoardGamesGeekView(View):
         posts = soup.find_all("h3", {"class": 'post_title'})
 
         for post in posts:
-            bgg_post_title = post.find('a').text
-            bgg_post_link = post.find('a')['href']
-            data.append((bgg_post_link, bgg_post_title))
+            title = post.find('a').text
+            url = f"https://boardgamegeek.com{post.find('a')['href']}"
+            data.append((url, title))
 
         # Creating Article
-        Article.check_if_article_already_exist(data, portals[1][1])
+        Article.check_if_article_already_exist(data, portals[1][1], languages[1][1])
 
         # Check if data not empty
         if len(data) == 0:
@@ -106,7 +191,7 @@ class ArcheologyView(View):
                 data.append((url, title, img))
 
         # Creating Article
-        Article.check_if_article_already_exist(data, portals[3][1])
+        Article.check_if_article_already_exist(data, portals[3][1], languages[0][1])
 
         if len(data) == 0:
             context = {'data': [('#', 'No data to view. Contact with administrator.')]}
@@ -127,14 +212,14 @@ class ToJuzByloView(View):
         tds = soup.find_all('td', {'class': 'col-1 col-first'})
 
         for td in tds:
-            title = td.find('h2', {'class': 'tytul'}).text
+            title = (td.find('h2', {'class': 'tytul'}).text).split('\n')[1]
             img = td.find('img')['src']
             href = td.find_all('a')[1]['href']
             url = f"https://tojuzbylo.pl/{href}"
             data.append((url, title, img))
 
         # Creating Article
-        Article.check_if_article_already_exist(data, portals[2][1])
+        Article.check_if_article_already_exist(data, portals[2][1], languages[0][1])
 
         if len(data) == 0:
             context = {'data': [('#', 'No data to view. Contact with administrator.')]}
@@ -157,14 +242,13 @@ class ComputerWorldView(View):
 
         for div in divs:
             img = div.find('img', {'class': 'img-fluid'})['src']
-            href = div.find('a')['href']
-            url = f"https://www.computerworld.pl{href}"
+            url = f"https://www.computerworld.pl{div.find('a')['href']}"
             title = div.find('a')['href'].split(',')[0].split('/')[2].replace('-', ' ')
 
             data.append((url, title, img))
 
         # Creating Article
-        Article.check_if_article_already_exist(data, portals[4][1])
+        Article.check_if_article_already_exist(data, portals[4][1], languages[0][1])
 
         if len(data) == 0:
             context = {'data': [('#', 'No data to view. Contact with administrator.')]}
@@ -186,15 +270,14 @@ class PythonView(View):
         figs = soup.find_all('figure', {'class': 'well-img'})
 
         for div, figure in zip(divs, figs):
-            href = div.find('a')['href']
             title = div.find('a').text
-            url = f'https://www.infoworld.com{href}'
+            url = f"https://www.infoworld.com{div.find('a')['href']}"
             img = figure.find('img')['data-original']
 
             data.append((url, title, img))
 
         # Creating Article
-        Article.check_if_article_already_exist(data, portals[5][1])
+        Article.check_if_article_already_exist(data, portals[5][1], languages[1][1])
 
         if len(data) == 0:
             context = {'data': [('#', 'No data to view. Contact with administrator.')]}
@@ -219,11 +302,11 @@ class RealPythonView(View):
             a_tags = post.find_all('a')[0]
             title = a_tags.find('img')['alt']
             img = a_tags.find('img')['src']
-            url = a_tags['href']
+            url = f"https://realpython.com{a_tags['href']}"
             data.append((url, title, img))
 
         # Creating Article
-        Article.check_if_article_already_exist(data, portals[6][1])
+        Article.check_if_article_already_exist(data, portals[6][1], languages[1][1])
 
         if len(data) == 0:
             context = {'data': [('#', 'No data to view. Contact with administrator.')]}
@@ -252,7 +335,7 @@ class BushcraftableView(View):
             data.append((url, title, img))
 
         # Creating Article
-        Article.check_if_article_already_exist(data, portals[7][1])
+        Article.check_if_article_already_exist(data, portals[7][1], languages[1][1])
 
         if len(data) == 0:
             context = {'data': [('#', 'No data to view. Contact with administrator.')]}
@@ -267,7 +350,10 @@ class BushcraftableView(View):
 # soup.find_all(lambda tag: tag.name == 'p' and 'et' in tag.text)
 
 
+# https://www.livescience.com/news
+
 # TODO: Widok statystyk. Obliczenie ilości artykułów i piechart na widoku statystycznym,
 
 # TODO: Settingsy porownac do django projektu KWL/Inforshare i pozmieniać.
 
+# detect language - https://pypi.org/project/langdetect/
