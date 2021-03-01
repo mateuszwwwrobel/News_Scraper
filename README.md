@@ -6,10 +6,10 @@ Website created for personal purposes. It scrapes data from several other websit
 In addition it store all articles in database and show some statistics in subpage.
 
 Main View:
-![Window view](https://github.com/mateuszwwwrobel/March_Stones_Aberdeen/blob/master/static/img/preview.png)
+![Window view](https://github.com/mateuszwwwrobel/Tasty_News/blob/master/static/img/preview_1.png?raw=true)
 
 Statistics View:
-![Window view](https://github.com/mateuszwwwrobel/March_Stones_Aberdeen/blob/master/static/img/preview.png)
+![Window view](https://github.com/mateuszwwwrobel/Tasty_News/blob/master/static/img/preview_2.png?raw=true)
 
 ## Getting Started
 
