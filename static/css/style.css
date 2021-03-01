@@ -1,2 +1,7 @@
-.card-comments img {
-  width: 4rem; }
+.row-modify{
+    display: flex;
+    flex-wrap: wrap;
+    margin-right: -15px;
+    margin-left: 0px;
+
+}
