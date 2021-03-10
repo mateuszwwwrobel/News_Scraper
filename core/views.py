@@ -24,7 +24,6 @@ class HomeView(TemplateView):
 
 class StatisticsView(View):
     def get(self, request):
-        # most_frequently_used_word = by website / general
         return render(self.request, 'statistics.html')
 
     def get_all_article_pie_chart_data(self):
