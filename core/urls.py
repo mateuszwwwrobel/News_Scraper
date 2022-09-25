@@ -1,6 +1,6 @@
 from django.urls import path
 from .views import PythonView, RealPythonView, HomeView, BenchmarkView, BoardGamesGeekView, ArcheologyView, \
-    ToJuzByloView, ComputerWorldView, BushcraftableView, StatisticsView
+    ToJuzByloView, ComputerWorldView, LiveScienceView, StatisticsView
 
 app_name = 'core'
 
@@ -13,7 +13,7 @@ urlpatterns = [
     path('computerworld/', ComputerWorldView.as_view(), name="computer-world"),
     path('python/', PythonView.as_view(), name="python"),
     path('real-python/', RealPythonView.as_view(), name="real-python"),
-    path('bushcraftable/', BushcraftableView.as_view(), name="bushcraftable"),
+    path('livescience/', LiveScienceView.as_view(), name="livescience"),
     path('statistics/', StatisticsView.as_view(), name="statistics"),
 
     path('chart-1/', StatisticsView.get_all_article_pie_chart_data, name='chart-1'),

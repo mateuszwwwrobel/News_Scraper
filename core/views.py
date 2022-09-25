@@ -15,7 +15,7 @@ TOJUZBYLO_URL = 'https://tojuzbylo.pl/aktualnosci'
 COMPUTER_WORLD_WEB_URL = 'https://www.computerworld.pl/'
 PYTHON_WEB_URL = 'https://www.infoworld.com/uk/category/python/'
 REAL_PYTHON_WEB_URL = 'https://realpython.com/'
-BUSHCRAFTABLE_URL = 'https://bushcraftable.com/'
+LIVESCIENCE_URL = 'https://livescience.com/'
 
 
 class HomeView(TemplateView):
@@ -317,33 +317,29 @@ class RealPythonView(View):
         return render(self.request, 'real_python.html', context)
 
 
-class BushcraftableView(View):
+class LiveScienceView(View):
     def get(self, *args, **kwargs):
-        soup = parse_a_website(BUSHCRAFTABLE_URL)
+        soup = parse_a_website(LIVESCIENCE_URL)
 
-        # Getting data from soup
+        posts = soup.find_all('div', {'class': 'listingResult'})
         data = []
+        for post in posts[:-3]:
+            if post.find('a'):
+                url = post.find('a')['href']
+                title = post.find('a')['aria-label']
+                img = post.find('figure')['data-original']
+                data.append((url, title, img))
 
-        post_headers = soup.find_all('h2', {'class': 'entry-title'})
-        post_images = soup.find_all('div', {'class': 'post-image'})
-
-        for header, image in zip(post_headers, post_images):
-            url = header.find('a')['href']
-            title = header.find('a').text
-            img = image.find('img')['src']
-            data.append((url, title, img))
-
-        # Creating Article
-        Article.check_if_article_already_exist(data, portals[7][1], languages[1][1])
+        Article.check_if_article_already_exist(data, 'livescience.com', 'ENG')
 
         if len(data) == 0:
             context = {'data': [('#', 'No data to view. Contact with administrator.')]}
-            return render(self.request, 'bushcraftable.html', context)
+            return render(self.request, 'livescience.html', context)
 
         context = {
             'data': data,
         }
-        return render(self.request, 'bushcraftable.html', context)
+        return render(self.request, 'livescience.html', context)
 
 
 # soup.find_all(lambda tag: tag.name == 'p' and 'et' in tag.text)
