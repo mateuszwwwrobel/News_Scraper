@@ -1,1 +1,0 @@
-web: gunicorn News_Scraper.wsgi --log-file - 

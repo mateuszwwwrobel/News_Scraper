@@ -5,3 +5,11 @@
     margin-left: 0px;
 
 }
+
+.scale-on{
+    transition: all .2s ease-in-out;
+}
+
+.scale-on:hover{
+    transform: scale(1.2);
+}

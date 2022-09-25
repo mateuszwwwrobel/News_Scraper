@@ -8,7 +8,7 @@ portals = (
     ('Computer World', 'Computer World'),
     ('InfoWorldPython.com', 'InfoWorldPython.com'),
     ('RealPython.com', 'RealPython.com'),
-    ('bushcraftable.com', 'bushcraftable.com'),
+    ('livescience.com', 'livescience.com'),
 )
 
 languages = (
@@ -30,8 +30,7 @@ class Article(models.Model):
     @classmethod
     def check_if_article_already_exist(cls, posts_list, portal, language) -> None:
         all_articles = Article.objects.filter(portal=portal)
-        article_list = []
-        [article_list.append(article.url) for article in all_articles]
+        article_list = [article.url for article in all_articles]
 
         for post in posts_list:
             if post[0] in article_list:

@@ -15,7 +15,7 @@ TOJUZBYLO_URL = 'https://tojuzbylo.pl/aktualnosci'
 COMPUTER_WORLD_WEB_URL = 'https://www.computerworld.pl/'
 PYTHON_WEB_URL = 'https://www.infoworld.com/uk/category/python/'
 REAL_PYTHON_WEB_URL = 'https://realpython.com/'
-BUSHCRAFTABLE_URL = 'https://bushcraftable.com/'
+LIVESCIENCE_URL = 'https://livescience.com/'
 
 
 class HomeView(TemplateView):
@@ -117,14 +117,11 @@ class StatisticsView(View):
 class BenchmarkView(View):
     def get(self, *args, **kwargs):
         soup = parse_a_website(BENCHMARK_URL)
-
-        # Getting data from soup
-        data = []
-
         sections = soup.find_all('section')
-        section_3 = sections[3]
+        section_3 = sections[4]
         section_3_divs = section_3.find_all('div')
 
+        data = []
         for div in section_3_divs[1:2]:
             benchmark_li = div.find_all('li')
             for li in benchmark_li:
@@ -132,10 +129,8 @@ class BenchmarkView(View):
                 url = f"http://benchmark.pl{li.find('a')['href']}"
                 data.append((url, title))
 
-        # Creating Article
-        Article.check_if_article_already_exist(data, portals[0][0], languages[0][1])
+        Article.check_if_article_already_exist(data, 'Benchmark.pl', 'PL')
 
-        # Check if data not empty
         if len(data) == 0:
             context = {'data': [('#', 'No data to view. Contact with administrator.')]}
             return render(self.request, 'benchmark.html', context)
@@ -149,38 +144,31 @@ class BenchmarkView(View):
 class BoardGamesGeekView(View):
     def get(self, *args, **kwargs):
         soup = parse_a_website(BGG_URL)
-
-        # Getting data from soup
-        data = []
         posts = soup.find_all("h3", {"class": 'post_title'})
 
+        data = []
         for post in posts:
             title = post.find('a').text
             url = f"https://boardgamegeek.com{post.find('a')['href']}"
             data.append((url, title))
 
-        # Creating Article
-        Article.check_if_article_already_exist(data, portals[1][1], languages[1][1])
+        Article.check_if_article_already_exist(data, 'boardgamesgeek.com', 'ENG')
 
-        # Check if data not empty
         if len(data) == 0:
             context = {'data': [('#', 'No data to view. Contact with administrator.')]}
             return render(self.request, 'bgg.html', context)
 
-        context = {
-            'data': data,
-        }
+        context = {'data': data}
+
         return render(self.request, 'bgg.html', context,)
 
 
 class ArcheologyView(View):
     def get(self, *args, **kwargs):
         soup = parse_a_website(ZWIAD_HISTORII_URL)
-
-        # Getting data from soup
-        data = []
         divs_1 = soup.find_all("div", {"class": 'td_module_1 td_module_wrap td-animation-stack'})
 
+        data = []
         for div in divs_1:
             divs_2 = div.find_all('div', {'class': 'td-module-thumb'})
             for element in divs_2:
@@ -189,8 +177,7 @@ class ArcheologyView(View):
                 img = element.find('img')['data-img-url']
                 data.append((url, title, img))
 
-        # Creating Article
-        Article.check_if_article_already_exist(data, portals[3][1], languages[0][1])
+        Article.check_if_article_already_exist(data, 'Zwiadowca Historii', 'PL')
 
         if len(data) == 0:
             context = {'data': [('#', 'No data to view. Contact with administrator.')]}
@@ -205,11 +192,9 @@ class ArcheologyView(View):
 class ToJuzByloView(View):
     def get(self, *args, **kwargs):
         soup = parse_a_website(TOJUZBYLO_URL)
-
-        # Getting data from soup
-        data = []
         tds = soup.find_all('td', {'class': 'col-1 col-first'})
 
+        data = []
         for td in tds:
             title = (td.find('h2', {'class': 'tytul'}).text).split('\n')[1]
             img = td.find('img')['src']
@@ -217,8 +202,7 @@ class ToJuzByloView(View):
             url = f"https://tojuzbylo.pl/{href}"
             data.append((url, title, img))
 
-        # Creating Article
-        Article.check_if_article_already_exist(data, portals[2][1], languages[0][1])
+        Article.check_if_article_already_exist(data, 'Tojuzbylo.pl', 'PL')
 
         if len(data) == 0:
             context = {'data': [('#', 'No data to view. Contact with administrator.')]}
@@ -233,21 +217,17 @@ class ToJuzByloView(View):
 class ComputerWorldView(View):
     def get(self, *args, **kwargs):
         soup = parse_a_website(COMPUTER_WORLD_WEB_URL)
-
-        # Getting data from soup
-        data = []
         main_div = soup.find('div', {'class': 'left-side'})
         divs = main_div.find_all('div', {'class': 'row-item-icon'})
 
+        data = []
         for div in divs:
             img = div.find('img', {'class': 'img-fluid'})['src']
             url = f"https://www.computerworld.pl{div.find('a')['href']}"
             title = div.find('a')['href'].split(',')[0].split('/')[2].replace('-', ' ')
-
             data.append((url, title, img))
 
-        # Creating Article
-        Article.check_if_article_already_exist(data, portals[4][1], languages[0][1])
+        Article.check_if_article_already_exist(data, 'Computer World', 'PL')
 
         if len(data) == 0:
             context = {'data': [('#', 'No data to view. Contact with administrator.')]}
@@ -262,21 +242,17 @@ class ComputerWorldView(View):
 class PythonView(View):
     def get(self, *args, **kwargs):
         soup = parse_a_website(PYTHON_WEB_URL)
-
-        # Getting data from soup
-        data = []
         divs = soup.find_all('div', {'class': 'post-cont'})
         figs = soup.find_all('figure', {'class': 'well-img'})
 
+        data = []
         for div, figure in zip(divs, figs):
             title = div.find('a').text
             url = f"https://www.infoworld.com{div.find('a')['href']}"
             img = figure.find('img')['data-original']
-
             data.append((url, title, img))
 
-        # Creating Article
-        Article.check_if_article_already_exist(data, portals[5][1], languages[1][1])
+        Article.check_if_article_already_exist(data, 'InfoWorldPython.com', 'ENG')
 
         if len(data) == 0:
             context = {'data': [('#', 'No data to view. Contact with administrator.')]}
@@ -291,12 +267,9 @@ class PythonView(View):
 class RealPythonView(View):
     def get(self, *args, **kwargs):
         soup = parse_a_website(REAL_PYTHON_WEB_URL)
-
-        # Getting data from soup
-        data = []
-
         posts = soup.find_all('div', {'class': 'card border-0'})
 
+        data = []
         for post in posts:
             a_tags = post.find_all('a')[0]
             title = a_tags.find('img')['alt']
@@ -304,8 +277,7 @@ class RealPythonView(View):
             url = f"https://realpython.com{a_tags['href']}"
             data.append((url, title, img))
 
-        # Creating Article
-        Article.check_if_article_already_exist(data, portals[6][1], languages[1][1])
+        Article.check_if_article_already_exist(data, 'RealPython.com', 'ENG')
 
         if len(data) == 0:
             context = {'data': [('#', 'No data to view. Contact with administrator.')]}
@@ -317,42 +289,26 @@ class RealPythonView(View):
         return render(self.request, 'real_python.html', context)
 
 
-class BushcraftableView(View):
+class LiveScienceView(View):
     def get(self, *args, **kwargs):
-        soup = parse_a_website(BUSHCRAFTABLE_URL)
+        soup = parse_a_website(LIVESCIENCE_URL)
 
-        # Getting data from soup
+        posts = soup.find_all('div', {'class': 'listingResult'})
         data = []
+        for post in posts[:-3]:
+            if post.find('a'):
+                url = post.find('a')['href']
+                title = post.find('a')['aria-label']
+                img = post.find('figure')['data-original']
+                data.append((url, title, img))
 
-        post_headers = soup.find_all('h2', {'class': 'entry-title'})
-        post_images = soup.find_all('div', {'class': 'post-image'})
-
-        for header, image in zip(post_headers, post_images):
-            url = header.find('a')['href']
-            title = header.find('a').text
-            img = image.find('img')['src']
-            data.append((url, title, img))
-
-        # Creating Article
-        Article.check_if_article_already_exist(data, portals[7][1], languages[1][1])
+        Article.check_if_article_already_exist(data, 'livescience.com', 'ENG')
 
         if len(data) == 0:
             context = {'data': [('#', 'No data to view. Contact with administrator.')]}
-            return render(self.request, 'bushcraftable.html', context)
+            return render(self.request, 'livescience.html', context)
 
         context = {
             'data': data,
         }
-        return render(self.request, 'bushcraftable.html', context)
-
-
-# soup.find_all(lambda tag: tag.name == 'p' and 'et' in tag.text)
-
-
-# https://www.livescience.com/news
-
-# TODO: Widok statystyk. Obliczenie ilości artykułów i piechart na widoku statystycznym,
-
-# TODO: Settingsy porownac do django projektu KWL/Inforshare i pozmieniać.
-
-# detect language - https://pypi.org/project/langdetect/
+        return render(self.request, 'livescience.html', context)

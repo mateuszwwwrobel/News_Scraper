@@ -264,7 +264,7 @@ class TestBushcraftableView(TestCase):
     def test_view_uses_correct_template(self) -> None:
         response = self.client.get(reverse('core:bushcraftable'))
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'bushcraftable.html')
+        self.assertTemplateUsed(response, 'livescience.html')
 
     def test_if_context_has_proper_data(self) -> None:
         response = self.client.get('/bushcraftable/')
