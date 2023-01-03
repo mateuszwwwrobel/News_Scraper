@@ -16,6 +16,7 @@ COMPUTER_WORLD_WEB_URL = 'https://www.computerworld.pl/'
 PYTHON_WEB_URL = 'https://www.infoworld.com/uk/category/python/'
 REAL_PYTHON_WEB_URL = 'https://realpython.com/'
 LIVESCIENCE_URL = 'https://livescience.com/'
+LOWCYGIER_URL = 'https://lowcygier.pl/'
 
 
 class HomeView(TemplateView):
@@ -312,3 +313,27 @@ class LiveScienceView(View):
             'data': data,
         }
         return render(self.request, 'livescience.html', context)
+
+
+class LowcyGierView(View):
+    def get(self, *args, **kwargs):
+        soup = parse_a_website(LOWCYGIER_URL)
+        posts = soup.find_all('div', {'class': 'nc has-media'})
+        data = []
+        for post in posts:
+            if post.find('a'):
+                url = post.find('a')['href']
+                title = post.find('h2').text.strip()
+                img = post.find('img')['src']
+                data.append((url, title, img))
+
+        Article.check_if_article_already_exist(data, 'lowcygier.com', 'PL')
+
+        if len(data) == 0:
+            context = {'data': [('#', 'No data to view. Contact with administrator.')]}
+            return render(self.request, 'lowcygier.html', context)
+
+        context = {
+            'data': data,
+        }
+        return render(self.request, 'lowcygier.html', context)

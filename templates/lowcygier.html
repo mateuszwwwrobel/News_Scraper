@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+
+{% block title %}
+<title>Łowcy Gier</title>
+{% endblock title %}
+
+{% block content %}
+<main class="mt-5 pt-5">
+    <div class="container">
+        <hr class="my-5">
+        <section class="wow fadeIn">
+            <h2 class="h1 text-center my-5 font-weight-bold">Łowcy Gier - Tasty News</h2>
+            <div class="row text-left">
+                <div class="col-lg-6 col-md-12 h-100">
+                    {% for element in data %}
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div class="view overlay rounded z-depth-1">
+                                <img src="{{ element.2 }}" class="img-fluid">
+                                <a>
+                                    <div class="mask rgba-white-slight"></div>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="col-md-9 mt-3">
+                            <a target="_blank" href="{{ element.0 }}">
+                                <p class="h6"><i class="pr-2 fas fa-link"></i>{{ element.1 }}</p>
+                            </a>
+                        </div>
+                    </div>
+                    <hr>
+                    {% endfor %}
+                </div>
+            </div>
+        </section>
+    </div>
+</main>
+{% endblock content %}
