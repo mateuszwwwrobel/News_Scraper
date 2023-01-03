@@ -9,6 +9,7 @@ portals = (
     ('InfoWorldPython.com', 'InfoWorldPython.com'),
     ('RealPython.com', 'RealPython.com'),
     ('livescience.com', 'livescience.com'),
+    ('lowcygier.pl', 'lowcygier.pl')
 )
 
 languages = (
