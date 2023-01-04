@@ -1,4 +1,4 @@
-* [Visit website](https://tasty-news.herokuapp.com/)
+* [Visit website](http://tastynews.mateuszwrobel.com)
 
 
 # Tasty News
